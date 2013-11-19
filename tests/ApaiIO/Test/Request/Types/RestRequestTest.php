@@ -20,6 +20,7 @@ namespace ApaiIO\Test\Request\Types;
 use ApaiIO\Configuration\GenericConfiguration;
 use ApaiIO\ApaiIO;
 use ApaiIO\Operations\Search;
+use ApaiIO\Request\Rest\Request;
 
 class RestRequestTest extends \PHPUnit_Framework_TestCase
 {
@@ -98,6 +99,42 @@ class RestRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("False", $success);
 
         $this->assertEquals('AWS.MinimumParameterRequirement', (string) $res[0]->Errors->Error->Code);
+    }
+
+    public function testOverrideOptionsOverSetOptions()
+    {
+        $request = new Request();
+        $originalOptions = $request->getOptions();
+        $request->setOptions(array(
+            CURLOPT_USERAGENT => __METHOD__
+        ));
+        $manipulatedOptions = $request->getOptions();
+        $this->assertNotEquals(
+            $manipulatedOptions[CURLOPT_USERAGENT],
+            $originalOptions[CURLOPT_USERAGENT]
+        );
+    }
+
+
+    /**
+     * @expectedException RuntimeException
+     */
+    public function testOverrideOptionsOverSetOptionsWithInvalidKey()
+    {
+        $request = new Request();
+        $request->setOptions(array(
+            -11 => __METHOD__
+        ));
+
+        $request->setConfiguration($this->conf);
+
+        $search = new Search();
+        $search
+            ->setCategory('DVD')
+            ->setPage(2);
+
+        $request->perform($search);
+
     }
 
     protected function runOperation($operation)
