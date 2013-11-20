@@ -14,7 +14,7 @@ class ObjectToResult extends ObjectToArray implements ResponseTransformerInterfa
             foreach( $response['Items']['Item'] as $item )
             {
                 $row = array();
-				$row['id'] = $item['ASIN'];
+				$row['asin'] = $item['ASIN'];
                 $row['price'] = isset($item['OfferSummary']['LowestNewPrice']['FormattedPrice']) ? $item['OfferSummary']['LowestNewPrice']['FormattedPrice']:'';
                 $row['title'] = $item['ItemAttributes']['Title'];
                 $row['image'] = $item['SmallImage']['URL'];

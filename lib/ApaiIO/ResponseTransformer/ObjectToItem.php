@@ -10,7 +10,7 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
 		
 		$item = $response['Items']['Item'];				
 		$data = array();
-		$data['id'] = $item['ASIN'];
+		$data['asin'] = $item['ASIN'];
 		$data['title'] = $item['ItemAttributes']['Title'];
 		$data['manufacturer'] = $item['ItemAttributes']['Manufacturer'];
 		$data['features'] = $item['ItemAttributes']['Feature'];
