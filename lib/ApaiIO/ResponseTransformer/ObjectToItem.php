@@ -15,7 +15,9 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
 		$data['manufacturer'] = $item['ItemAttributes']['Manufacturer'];
 		$data['features'] = $item['ItemAttributes']['Feature'];
 		$data['price'] = isset($item['OfferSummary']['LowestNewPrice']['FormattedPrice']) ? $item['OfferSummary']['LowestNewPrice']['FormattedPrice']:'';
-		$data['image'] = $item['LargeImage']['URL'];
+		$data['large_image'] = $item['LargeImage']['URL'];
+		$data['medium_image'] = $item['MediumImage']['URL'];
+		$data['small_image'] = $item['SmallImage']['URL'];
                 
         return $data;
     }

@@ -17,7 +17,9 @@ class ObjectToResult extends ObjectToArray implements ResponseTransformerInterfa
 				$row['asin'] = $item['ASIN'];
                 $row['price'] = isset($item['OfferSummary']['LowestNewPrice']['FormattedPrice']) ? $item['OfferSummary']['LowestNewPrice']['FormattedPrice']:'';
                 $row['title'] = $item['ItemAttributes']['Title'];
-                $row['image'] = $item['SmallImage']['URL'];
+				$row['large_image'] = $item['LargeImage']['URL'];
+				$row['medium_image'] = $item['MediumImage']['URL'];				
+                $row['small_image'] = $item['SmallImage']['URL'];
                 
                 $data[] = $row;
             }
