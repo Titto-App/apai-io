@@ -37,11 +37,25 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
 		$this->set('title', 'ItemAttributes', 'Title');
 		$this->set('manufacturer', 'ItemAttributes', 'Manufacturer');
 		$this->set('features', 'ItemAttributes', 'Feature');
+		$this->set('author', 'ItemAttributes', 'Author');
+		$this->set('publisher', 'ItemAttributes', 'Publisher');
+		$this->set('number_of_pages', 'ItemAttributes', 'NumberOfPages');
+		$this->set('number_of_items', 'ItemAttributes', 'NumberOfItems');
+		$this->set('number_of_issues', 'ItemAttributes', 'NumberOfIssues');
+		$this->set('model', 'ItemAttributes', 'Model');
+		$this->set('label', 'ItemAttributes', 'Label');
+		$this->set('format', 'ItemAttributes', 'Format');
+		$this->set('edition', 'ItemAttributes', 'Edition');
+		$this->set('artist', 'ItemAttributes', 'Artist');
+		$this->set('description', 'EditorialReviews', 'EditorialReview', 'Content');
 		$this->set('price', 'OfferSummary', 'LowestNewPrice', 'FormattedPrice');
 		$this->set('large_image', 'LargeImage', 'URL');
 		$this->set('medium_image', 'MediumImage', 'URL');
 		$this->set('small_image', 'SmallImage', 'URL');
-                
+		$this->set('reviews', 'CustomerReviews', 'IFrameURL');
+        
+		$this->get_image_sets();
+		
         return $this->data;
     }
 	
@@ -94,6 +108,31 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
 			{
 				$this->data[$data] = $this->item[$key1];
 			}			
+		}
+	}
+	
+	private function get_image_sets()
+	{
+		if( isset($this->item['ImageSets']['ImageSet']) 
+				AND is_array($this->item['ImageSets']['ImageSet']) )
+		{
+			$this->data['image_sets'] = array();
+			
+			$sets = $this->item['ImageSets'];
+			
+			foreach( $sets as $set )
+			{
+				$row = array();
+				if( isset($set['MediumImage']['URL']) )
+				{
+					$row['medium_image'] = $set['MediumImage']['URL'];
+				}
+				if( isset($set['LargeImage']['URL']) )
+				{
+					$row['large_image'] = $set['LargeImage']['URL'];
+				}				
+				$this->data['image_sets'][] = $row;
+			}
 		}
 	}
 }
