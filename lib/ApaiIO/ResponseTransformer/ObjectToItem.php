@@ -36,7 +36,7 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
 		$this->set('asin', 'ASIN');
 		$this->set('title', 'ItemAttributes', 'Title');
 		$this->set('manufacturer', 'ItemAttributes', 'Manufacturer');
-		$this->set('features', 'ItemAttributes', 'Feature');
+		$this->set_array('features', 'ItemAttributes', 'Feature');
 		$this->set('author', 'ItemAttributes', 'Author');
 		$this->set('publisher', 'ItemAttributes', 'Publisher');
 		$this->set('number_of_pages', 'ItemAttributes', 'NumberOfPages');
@@ -111,6 +111,18 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
 		}
 	}
 	
+    protected function set_array($data, $key1, $key2=NULL, $key3=NULL)
+    {
+        $this->set($data, $key1, $key2, $key3);
+        if(isset($this->data[$data]) AND !is_array( $this->data[$data]))
+        {
+            $this->data[$data] = array($this->data[$data]);
+        }
+    }
+
+    /**
+	 * 
+	 */
 	private function get_image_sets()
 	{
 		if( isset($this->item['ImageSets']['ImageSet']) 
