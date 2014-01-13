@@ -48,7 +48,7 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
 		$this->set('edition', 'ItemAttributes', 'Edition');
 		$this->set('artist', 'ItemAttributes', 'Artist');
 		$this->set('description', 'EditorialReviews', 'EditorialReview', 'Content');
-		$this->set('price', 'OfferSummary', 'LowestNewPrice', 'FormattedPrice');
+		$this->set('price', 'OfferSummary', 'LowestNewPrice', 'Amount');
 		$this->set('large_image', 'LargeImage', 'URL');
 		$this->set('medium_image', 'MediumImage', 'URL');
 		$this->set('small_image', 'SmallImage', 'URL');
