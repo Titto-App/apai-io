@@ -55,7 +55,7 @@ class ObjectToItems extends ObjectToArray implements ResponseTransformerInterfac
             $this->set($i, 'medium_image', 'MediumImage', 'URL');
             $this->set($i, 'small_image', 'SmallImage', 'URL');
             $this->set($i, 'reviews', 'CustomerReviews', 'IFrameURL');
-        
+            $this->set($i, 'nodes', 'BrowseNodes');
             $this->get_image_sets($i);
         }
         return $this->data;
