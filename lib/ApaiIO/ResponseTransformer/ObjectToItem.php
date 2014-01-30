@@ -57,7 +57,9 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
         $this->get_category();
 		$this->get_image_sets();
 
-        return Arr::map('strip_tags', $this->data);
+        $this->cleanup();
+
+        return $this->data;
     }
 	
 	/**
@@ -170,5 +172,10 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
         {
             return $node['Name'];
         }
+    }
+
+    private function cleanup()
+    {
+        $this->data = array_map('strip_tags', $this->data);
     }
 }

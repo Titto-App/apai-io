@@ -47,7 +47,7 @@ class ObjectToResult extends ObjectToArray implements ResponseTransformerInterfa
 				$row['small_image'] = $item['SmallImage']['URL'];
 			}
 			
-			$data[] = $row;
+			$data[] = array_map('strip_tags', $row);
 		}
          
         return $data;
