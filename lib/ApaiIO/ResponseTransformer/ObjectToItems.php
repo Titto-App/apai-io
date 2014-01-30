@@ -55,7 +55,8 @@ class ObjectToItems extends ObjectToArray implements ResponseTransformerInterfac
             $this->set($i, 'medium_image', 'MediumImage', 'URL');
             $this->set($i, 'small_image', 'SmallImage', 'URL');
             $this->set($i, 'reviews', 'CustomerReviews', 'IFrameURL');
-            $this->set($i, 'nodes', 'BrowseNodes');
+
+            $this->get_category($i);
             $this->get_image_sets($i);
         }
         return $this->data;
@@ -149,4 +150,27 @@ class ObjectToItems extends ObjectToArray implements ResponseTransformerInterfac
 			}
 		}
 	}
+
+    private function get_category($i)
+    {
+        if( isset($this->items[$i]['BrowseNodes']['BrowseNode'])
+				AND is_array($this->items[$i]['BrowseNodes']['BrowseNode']) )
+		{
+			$this->data[$i]['category'] = $this->get_ancestor(
+                    $this->items[$i]['BrowseNodes']['BrowseNode'][0]
+            );
+        }
+    }
+
+    private function get_ancestor($node)
+    {
+        if(isset($node['Ancestors']) AND is_array( $node['Ancestors'] ))
+        {
+            return $this->get_ancestor($node['Ancestors']['BrowseNode']);
+        }
+        else
+        {
+            return $node['Name'];
+        }
+    }
 }
