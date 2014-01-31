@@ -49,17 +49,15 @@ class ObjectToItems extends ObjectToArray implements ResponseTransformerInterfac
             $this->set($i, 'format', 'ItemAttributes', 'Format');
             $this->set($i, 'edition', 'ItemAttributes', 'Edition');
             $this->set($i, 'artist', 'ItemAttributes', 'Artist');
-            $this->set($i, 'description', 'EditorialReviews', 'EditorialReview', 'Content');
             $this->set($i, 'price', 'OfferSummary', 'LowestNewPrice', 'Amount');
             $this->set($i, 'large_image', 'LargeImage', 'URL');
             $this->set($i, 'medium_image', 'MediumImage', 'URL');
             $this->set($i, 'small_image', 'SmallImage', 'URL');
             $this->set($i, 'reviews', 'CustomerReviews', 'IFrameURL');
 
+            $this->get_description($i);
             $this->get_category($i);
             $this->get_image_sets($i);
-
-            $this->cleanup($i);
         }
 
         return $this->data;
@@ -127,6 +125,16 @@ class ObjectToItems extends ObjectToArray implements ResponseTransformerInterfac
     }
 
     /**
+     *
+     * @param type $i
+     */
+    private function get_description($i)
+    {
+        $this->set($i, 'description', 'EditorialReviews', 'EditorialReview', 'Content');
+        $this->data[$i]['description'] = strip_tags($this->data[$i]['description']);
+    }
+
+    /**
 	 * 
 	 */
 	private function get_image_sets($i)
@@ -175,10 +183,5 @@ class ObjectToItems extends ObjectToArray implements ResponseTransformerInterfac
         {
             return $node['Name'];
         }
-    }
-
-    private function cleanup($i)
-    {
-        $this->data[$i] = array_map('strip_tags', $this->data[$i]);
     }
 }

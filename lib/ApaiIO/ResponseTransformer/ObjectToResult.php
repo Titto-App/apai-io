@@ -25,11 +25,13 @@ class ObjectToResult extends ObjectToArray implements ResponseTransformerInterfa
 			
 			$row['asin'] = $item['ASIN'];
 			$row['price'] = isset($item['OfferSummary']['LowestNewPrice']['Amount']) ? $item['OfferSummary']['LowestNewPrice']['Amount']:'';
-			$row['title'] = $item['ItemAttributes']['Title'];
+			$row['title'] = strip_tags($item['ItemAttributes']['Title']);
 
             if( isset($item['EditorialReviews']['EditorialReview']['Content']) )
 			{
-				$row['description'] = $item['EditorialReviews']['EditorialReview']['Content'];
+				$row['description'] = strip_tags(
+                        $item['EditorialReviews']['EditorialReview']['Content']
+                );
 			}
 
 			if( isset($item['LargeImage']['URL']) )
@@ -47,7 +49,7 @@ class ObjectToResult extends ObjectToArray implements ResponseTransformerInterfa
 				$row['small_image'] = $item['SmallImage']['URL'];
 			}
 			
-			$data[] = array_map('strip_tags', $row);
+			$data[] = $row;
 		}
          
         return $data;

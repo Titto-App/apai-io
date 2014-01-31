@@ -54,10 +54,9 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
 		$this->set('small_image', 'SmallImage', 'URL');
 		$this->set('reviews', 'CustomerReviews', 'IFrameURL');
 
+        $this->get_description();
         $this->get_category();
 		$this->get_image_sets();
-
-        $this->cleanup();
 
         return $this->data;
     }
@@ -124,6 +123,17 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
     }
 
     /**
+     *
+     * @param type $i
+     */
+    private function get_description()
+    {
+        $this->set('description', 'EditorialReviews', 'EditorialReview', 'Content');
+        $this->data['description'] = strip_tags($this->data['description']);
+    }
+
+
+    /**
 	 * 
 	 */
 	private function get_image_sets()
@@ -172,10 +182,5 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
         {
             return $node['Name'];
         }
-    }
-
-    private function cleanup()
-    {
-        $this->data = array_map('strip_tags', $this->data);
     }
 }
