@@ -131,7 +131,10 @@ class ObjectToItems extends ObjectToArray implements ResponseTransformerInterfac
     private function get_description($i)
     {
         $this->set($i, 'description', 'EditorialReviews', 'EditorialReview', 'Content');
-        $this->data[$i]['description'] = strip_tags($this->data[$i]['description']);
+        if(isset($this->data[$i]['description']))
+        {
+            $this->data[$i]['description'] = strip_tags($this->data[$i]['description']);
+        }
     }
 
     /**
