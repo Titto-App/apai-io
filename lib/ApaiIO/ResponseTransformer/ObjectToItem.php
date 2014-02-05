@@ -129,7 +129,10 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
     private function get_description()
     {
         $this->set('description', 'EditorialReviews', 'EditorialReview', 'Content');
-        $this->data['description'] = strip_tags($this->data['description']);
+        if(isset($this->data['description']))
+        {
+            $this->data['description'] = strip_tags($this->data['description']);
+        }
     }
 
 
@@ -166,9 +169,15 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
         if( isset($this->item['BrowseNodes']['BrowseNode'])
 				AND is_array($this->item['BrowseNodes']['BrowseNode']) )
 		{
-			$this->data['category'] = $this->get_ancestor(
-                    $this->item['BrowseNodes']['BrowseNode'][0]
-            );
+            if( isset($this->item['BrowseNodes']['BrowseNode'][0]) )
+            {
+                $node = $this->item['BrowseNodes']['BrowseNode'][0];
+            }
+            else
+            {
+                $node = $this->item['BrowseNodes']['BrowseNode'];
+            }
+			$this->data['category'] = $this->get_ancestor($node);
         }
     }
 
@@ -180,7 +189,7 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
         }
         else
         {
-            return $node['Name'];
+            return isset($node['Name']) ? $node['Name'] : 'Uncategorized';
         }
     }
 }

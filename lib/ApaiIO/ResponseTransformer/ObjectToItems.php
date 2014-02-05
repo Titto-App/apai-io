@@ -170,9 +170,15 @@ class ObjectToItems extends ObjectToArray implements ResponseTransformerInterfac
         if( isset($this->items[$i]['BrowseNodes']['BrowseNode'])
 				AND is_array($this->items[$i]['BrowseNodes']['BrowseNode']) )
 		{
-			$this->data[$i]['category'] = $this->get_ancestor(
-                    $this->items[$i]['BrowseNodes']['BrowseNode'][0]
-            );
+			if( isset($this->items[$i]['BrowseNodes']['BrowseNode'][0]) )
+            {
+                $node = $this->items[$i]['BrowseNodes']['BrowseNode'][0];
+            }
+            else
+            {
+                $node = $this->items[$i]['BrowseNodes']['BrowseNode'];
+            }
+            $this->data[$i]['category'] = $this->get_ancestor( $node );
         }
     }
 
