@@ -48,12 +48,13 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
 		$this->set('edition', 'ItemAttributes', 'Edition');
 		$this->set('artist', 'ItemAttributes', 'Artist');
 		$this->set('description', 'EditorialReviews', 'EditorialReview', 'Content');
-		$this->set('price', 'OfferSummary', 'LowestNewPrice', 'Amount');
+		$this->set('lowest_new_price', 'OfferSummary', 'LowestNewPrice', 'Amount');
 		$this->set('large_image', 'LargeImage', 'URL');
 		$this->set('medium_image', 'MediumImage', 'URL');
 		$this->set('small_image', 'SmallImage', 'URL');
 		$this->set('reviews', 'CustomerReviews', 'IFrameURL');
 
+        $this->get_price();
         $this->get_description();
         $this->get_category();
 		$this->get_image_sets();
@@ -120,6 +121,14 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
         {
             $this->data[$data] = array($this->data[$data]);
         }
+    }
+
+    private function get_price()
+    {
+        $list_price = isset( $this->item['ItemAttributes']['ListPrice']['Amount'] ) ? ($this->item['ItemAttributes']['ListPrice']['Amount'] / 100) : NULL;
+        $amazon_price = ($this->item['Offers']['Offer']['OfferListing']['Price']['Amount'] / 100);
+        $saved = isset( $this->item['Offers']['Offer']['OfferListing']['AmountSaved'] ) ? ($this->item['Offers']['Offer']['OfferListing']['AmountSaved']['Amount'] / 100) : NULL;
+        $this->data['price'] = (($list_price) ? $list_price : ($amazon_price + $saved));
     }
 
     /**
