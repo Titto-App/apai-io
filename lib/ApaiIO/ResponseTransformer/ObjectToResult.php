@@ -53,7 +53,12 @@ class ObjectToResult extends ObjectToArray implements ResponseTransformerInterfa
 
             if( isset( $item['ItemAttributes']['Author'] ) )
             {
-                $row['author'] = $item['ItemAttributes']['Author'];
+                $author = $item['ItemAttributes']['Author'];
+                if( ! is_array( $author ) )
+                {
+                    $author = array($author);
+                }
+                $row['author'] = $author;
             }
 
             $data[] = $row;
