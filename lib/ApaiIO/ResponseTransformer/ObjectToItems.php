@@ -35,26 +35,29 @@ class ObjectToItems extends ObjectToArray implements ResponseTransformerInterfac
         $c = count( $this->items );
         for( $i=0; $i < $c; $i++ )
         {
-            $this->set($i, 'asin', 'ASIN');
-            $this->set($i, 'title', 'ItemAttributes', 'Title');
-            $this->set($i, 'manufacturer', 'ItemAttributes', 'Manufacturer');
-            $this->set_array($i, 'features', 'ItemAttributes', 'Feature');
-            $this->set($i, 'author', 'ItemAttributes', 'Author');
-            $this->set($i, 'publisher', 'ItemAttributes', 'Publisher');
-            $this->set($i, 'number_of_pages', 'ItemAttributes', 'NumberOfPages');
-            $this->set($i, 'number_of_items', 'ItemAttributes', 'NumberOfItems');
-            $this->set($i, 'number_of_issues', 'ItemAttributes', 'NumberOfIssues');
-            $this->set($i, 'model', 'ItemAttributes', 'Model');
-            $this->set($i, 'label', 'ItemAttributes', 'Label');
-            $this->set($i, 'format', 'ItemAttributes', 'Format');
-            $this->set($i, 'edition', 'ItemAttributes', 'Edition');
-            $this->set($i, 'artist', 'ItemAttributes', 'Artist');
-            $this->set($i, 'price', 'OfferSummary', 'LowestNewPrice', 'Amount');
-            $this->set($i, 'large_image', 'LargeImage', 'URL');
-            $this->set($i, 'medium_image', 'MediumImage', 'URL');
-            $this->set($i, 'small_image', 'SmallImage', 'URL');
-            $this->set($i, 'reviews', 'CustomerReviews', 'IFrameURL');
+            $this->set( $i, 'asin', 'ASIN' );
+            $this->set( $i, 'title', 'ItemAttributes', 'Title' );
+            $this->set( $i, 'manufacturer', 'ItemAttributes', 'Manufacturer' );
+            $this->set( $i, 'isbn', 'ItemAttributes', 'ISBN' );
+            $this->set( $i, 'publisher', 'ItemAttributes', 'Publisher' );
+            $this->set( $i, 'number_of_pages', 'ItemAttributes', 'NumberOfPages' );
+            $this->set( $i, 'number_of_items', 'ItemAttributes', 'NumberOfItems' );
+            $this->set( $i, 'number_of_issues', 'ItemAttributes', 'NumberOfIssues' );
+            $this->set( $i, 'model', 'ItemAttributes', 'Model' );
+            $this->set( $i, 'label', 'ItemAttributes', 'Label' );
+            $this->set( $i, 'format', 'ItemAttributes', 'Format' );
+            $this->set( $i, 'edition', 'ItemAttributes', 'Edition' );
+            $this->set( $i, 'artist', 'ItemAttributes', 'Artist' );
+            $this->set( $i, 'description', 'EditorialReviews', 'EditorialReview', 'Content' );
+            $this->set( $i, 'lowest_new_price', 'OfferSummary', 'LowestNewPrice', 'Amount' );
+            $this->set( $i, 'large_image', 'LargeImage', 'URL' );
+            $this->set( $i, 'medium_image', 'MediumImage', 'URL' );
+            $this->set( $i, 'small_image', 'SmallImage', 'URL' );
+            $this->set( $i, 'reviews', 'CustomerReviews', 'IFrameURL' );
+            $this->set_array( $i, 'author', 'ItemAttributes', 'Author' );
+            $this->set_array( $i, 'features', 'ItemAttributes', 'Feature' );
 
+            $this->get_price($i);
             $this->get_description($i);
             $this->get_category($i);
             $this->get_image_sets($i);
@@ -122,6 +125,15 @@ class ObjectToItems extends ObjectToArray implements ResponseTransformerInterfac
         {
             $this->data[$i][$data] = array($this->data[$i][$data]);
         }
+    }
+
+    private function get_price($i)
+    {
+        $list_price = isset( $this->items[$i]['ItemAttributes']['ListPrice']['Amount'] ) ? $this->items[$i]['ItemAttributes']['ListPrice']['Amount'] : NULL;
+        $amazon_price = isset( $this->items[$i]['Offers']['Offer']['OfferListing']['Price']['Amount'] ) ? $this->items[$i]['Offers']['Offer']['OfferListing']['Price']['Amount'] : NULL;
+        $saved = isset( $this->items[$i]['Offers']['Offer']['OfferListing']['AmountSaved'] ) ? $this->items[$i]['Offers']['Offer']['OfferListing']['AmountSaved']['Amount'] : NULL;
+        $price = ($list_price) ? $list_price : ($amazon_price ? ($amazon_price + $saved) : NULL );
+        $this->data[$i]['price'] = ($price) ? $price : $this->data['lowest_new_price'];
     }
 
     /**
