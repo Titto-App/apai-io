@@ -143,9 +143,11 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
         $this->set( 'description', 'EditorialReviews', 'EditorialReview', 'Content' );
         if( isset( $this->data['description'] ) )
         {
-            $this->data['description'] = strip_tags( $this->data['description'] );
+            $this->data['description'] = $this->html2txt( $this->data['description'] );
         }
     }
+
+
 
     /**
      *

@@ -58,4 +58,23 @@ class ObjectToArray implements ResponseTransformerInterface
 
         return $out;
     }
+
+    /**
+     * Cleans response from CSS, JS, and other embedded meta information
+     * 
+     * @param string $text
+     * @return string
+     */
+    function html2txt($text)
+    {
+        $text = preg_replace( '/(<div id="variations-test">.+?)+(<\/div>)/i', '', $text );
+        $text = preg_replace( '/(<style>.+?)+(<\/style>)/i', '', $text );
+        $search = array('@<script[^>]*?>.*?</script>@si',  // Strip out javascript
+                       '@<[\/\!]*?[^<>]*?>@si',            // Strip out HTML tags
+                       '@<style[^>]*?>.*?</style>@siU',    // Strip style tags properly
+                       '@<![\s\S]*?--[ \t\n\r]*>@'         // Strip multi-line comments including CDATA
+        );
+        $text = preg_replace( $search, '', $text );
+        return trim( strip_tags( $text ) );
+    }
 }

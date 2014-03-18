@@ -145,7 +145,7 @@ class ObjectToItems extends ObjectToArray implements ResponseTransformerInterfac
         $this->set($i, 'description', 'EditorialReviews', 'EditorialReview', 'Content');
         if(isset($this->data[$i]['description']))
         {
-            $this->data[$i]['description'] = strip_tags($this->data[$i]['description']);
+            $this->data[$i]['description'] = $this->html2txt( $this->data[$i]['description'] );
         }
     }
 
