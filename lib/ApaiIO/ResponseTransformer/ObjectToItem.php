@@ -53,10 +53,10 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
         $this->set( 'large_image', 'LargeImage', 'URL' );
         $this->set( 'medium_image', 'MediumImage', 'URL' );
         $this->set( 'small_image', 'SmallImage', 'URL' );
-        $this->set( 'reviews', 'CustomerReviews', 'IFrameURL' );
         $this->set_array( 'author', 'ItemAttributes', 'Author' );
         $this->set_array( 'features', 'ItemAttributes', 'Feature' );
-        
+
+        $this->get_reviews();
         $this->get_price();
         $this->get_description();
         $this->get_category();
@@ -134,10 +134,6 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
         $this->data['price'] = ($price) ? $price : $this->data['lowest_new_price'];
     }
 
-    /**
-     *
-     * @param type $i
-     */
     private function get_description()
     {
         $this->set( 'description', 'EditorialReviews', 'EditorialReview', 'Content' );
@@ -147,7 +143,50 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
         }
     }
 
+    /**
+     * Parses the Amazon reviews iframe to get precise numeric review metrics
+     */
+    private function get_reviews()
+    {
+        if( isset( $this->item['CustomerReviews']['IFrameURL'] ) )
+        {
+            // Load the iFrame HTML from the URL returned by the API
+            $text = file_get_contents( $this->item['CustomerReviews']['IFrameURL'] );
 
+            // Clean up the HTML removing scripts and other unneeded data
+            $text = preg_replace( '/(<style>.+?)+(<\/style>)/i', '', $text );
+            $search = array('@<script[^>]*?>.*?</script>@si',  // javascript
+                            '@<style[^>]*?>.*?</style>@siU',   // style tags properly
+                            '@<![\s\S]*?--[ \t\n\r]*>@',       // multi-line comments including CDATA
+                            '/^\n+|^[\t\s]*\n+/m',             // empty lines
+            );
+            $text = trim( preg_replace( $search, '', $text ) );
+
+            // Load HTML into SimpleXML for parsing
+            libxml_use_internal_errors( TRUE );
+            $dom = new DOMDocument();
+            $dom->strictErrorChecking = FALSE;
+            $dom->recover = true;
+            $dom->loadHTML( $text );
+            $xml = simplexml_import_dom( $dom );
+
+            // Get the total amount of reviews
+            $stars = $xml->xpath( "//span[@class='crAvgStars']" );
+            $total_reviews = (int)preg_replace( '/[^\d]/', '', $stars[0]->a );
+
+            // Get the average rating
+            $summary = $xml->xpath( "//span[@class='asinReviewsSummary']" );
+            $img = $summary[0]->xpath('a/img');
+            $summary = preg_replace( '/[^\d]/', '', (string)$img[0]->attributes()->alt);
+            $summary = ((int)substr( $summary, 0, strlen($summary)-1 ))/10;
+
+            // Set data in response
+            $this->data['reviews'] = array(
+                'total' => $total_reviews,
+                'average' => $summary,
+            );
+        }
+    }
 
     /**
      *
