@@ -164,7 +164,7 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
 
             // Load HTML into SimpleXML for parsing
             libxml_use_internal_errors( TRUE );
-            $dom = new DOMDocument();
+            $dom = new \DOMDocument();
             $dom->strictErrorChecking = FALSE;
             $dom->recover = true;
             $dom->loadHTML( $text );
