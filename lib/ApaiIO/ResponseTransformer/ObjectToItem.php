@@ -166,7 +166,7 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
             libxml_use_internal_errors( TRUE );
             $dom = new \DOMDocument();
             $dom->strictErrorChecking = FALSE;
-            $dom->recover = true;
+            $dom->recover = TRUE;
             $dom->loadHTML( $text );
             $xml = simplexml_import_dom( $dom );
 
@@ -177,8 +177,8 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
             // Get the average rating
             $summary = $xml->xpath( "//span[@class='asinReviewsSummary']" );
             $img = $summary[0]->xpath('a/img');
-            $summary = preg_replace( '/[^\d]/', '', (string)$img[0]->attributes()->alt);
-            $summary = ((int)substr( $summary, 0, strlen($summary)-1 ))/10;
+            $summary = preg_replace( '/[^\d]/', '', (string)$img[0]->attributes()->alt );
+            $summary = (float)((int)substr( $summary, 0, strlen($summary)-1 ))/10;
 
             // Set data in response
             $this->data['reviews'] = array(
