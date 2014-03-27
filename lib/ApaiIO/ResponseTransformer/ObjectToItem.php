@@ -172,13 +172,20 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
 
             // Get the total amount of reviews
             $stars = $xml->xpath( "//span[@class='crAvgStars']" );
-            $total_reviews = (int)preg_replace( '/[^\d]/', '', $stars[0]->a );
+            $total_reviews = isset( $stars[0] ) ? (int)preg_replace( '/[^\d]/', '', $stars[0]->a ) : 0;
 
             // Get the average rating
             $summary = $xml->xpath( "//span[@class='asinReviewsSummary']" );
-            $img = $summary[0]->xpath('a/img');
-            $summary = preg_replace( '/[^\d]/', '', (string)$img[0]->attributes()->alt );
-            $summary = (float)((int)substr( $summary, 0, strlen($summary)-1 ))/10;
+            if( isset($summary[0]) )
+            {
+                $img = $summary[0]->xpath('a/img');
+                $summary = preg_replace( '/[^\d]/', '', (string)$img[0]->attributes()->alt );
+                $summary = (float)((int)substr( $summary, 0, strlen($summary)-1 ))/10;
+            }
+            else
+            {
+                $summary = 0;
+            }
 
             // Set data in response
             $this->data['reviews'] = array(
