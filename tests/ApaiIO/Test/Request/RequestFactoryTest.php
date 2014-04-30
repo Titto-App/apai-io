@@ -17,7 +17,10 @@
 
 namespace ApaiIO\Test\Request;
 
+use ApaiIO\Configuration\GenericConfiguration;
+use ApaiIO\Operations\Lookup;
 use ApaiIO\Request\RequestFactory;
+use ApaiIO\Request\Rest\Request;
 
 class RequestFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -52,6 +55,19 @@ class RequestFactoryTest extends \PHPUnit_Framework_TestCase
 
         RequestFactory::createRequest($configuration);
     }
+
+    public function testCustomConfigurationPassed()
+    {
+        $configuration = new GenericConfiguration();
+        $configuration->setCountry('de')
+            ->setAccessKey('ABC')
+            ->setSecretKey('DEF')
+            ->setAssociateTag('apaiIOTest')
+            ->setRequest(new Request());
+
+        $request = RequestFactory::createRequest($configuration);
+        $this->assertSame($configuration, \PHPUnit_Framework_Assert::readAttribute($request, 'configuration'));
+   }
 }
 
 class CallableClass
