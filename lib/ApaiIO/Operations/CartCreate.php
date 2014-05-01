@@ -25,14 +25,19 @@ namespace ApaiIO\Operations;
  */
 class CartCreate extends AbstractOperation
 {
-    private $itemCounter = 1;
-
     /**
      * {@inheritdoc}
      */
     public function getName()
     {
         return 'CartCreate';
+    }
+
+    public function __construct($id=NULL, $quantity=1, $byAsin = true)
+    {
+        if ($id) {
+            $this->addItem($id, $quantity, $byAsin);
+        }
     }
 
     /**
@@ -44,10 +49,11 @@ class CartCreate extends AbstractOperation
      */
     public function addItem($id, $quantity, $byAsin = true)
     {
-        $itemIdentifier = ($byAsin) ? '.ASIN' : '.OfferListingId';
-        $this->parameter['Item.' . $this->itemCounter . $itemIdentifier] = $id;
-        $this->parameter['Item.' . $this->itemCounter . '.Quantity'] = $quantity;
-
-        $this->itemCounter++;
+        $itemIdentifier = ($byAsin) ? 'ASIN' : 'OfferListingId';
+        $this->parameter['Items'] = array(
+            'Item' => array(
+                $itemIdentifier => $id,
+                'Quantity' => $quantity
+        ));
     }
 }
