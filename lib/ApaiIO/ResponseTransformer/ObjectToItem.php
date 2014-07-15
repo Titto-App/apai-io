@@ -98,9 +98,16 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
      * @param type $key2
      * @param type $key3
      */
-    protected function set($data, $key1, $key2 = NULL, $key3 = NULL)
+    protected function set($data, $key1, $key2 = NULL, $key3 = NULL, $key4 = NULL)
     {
-        if( $key3 )
+        if( $key4 )
+        {
+            if( isset( $this->item[$key1][$key2][$key3][$key4] ) )
+            {
+                $this->data[$data] = $this->item[$key1][$key2][$key3][$key4];
+            }
+        }
+        elseif( $key3 )
         {
             if( isset( $this->item[$key1][$key2][$key3] ) )
             {
@@ -143,7 +150,14 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
 
     private function get_description()
     {
-        $this->set( 'description', 'EditorialReviews', 'EditorialReview', 'Content' );
+        if(isset( $this->item['EditorialReviews']['EditorialReview'][1] ) )
+        {
+            $this->set( 'description', 'EditorialReviews', 'EditorialReview', 0, 'Content' );
+        }
+        else
+        {
+            $this->set( 'description', 'EditorialReviews', 'EditorialReview', 'Content' );
+        }
         if( isset( $this->data['description'] ) )
         {
             $this->data['description'] = $this->html2txt( $this->data['description'] );
