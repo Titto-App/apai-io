@@ -76,7 +76,14 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
 
         if( isset( $response['Items']['Item'] ) AND is_array( $response['Items']['Item'] ) )
         {
-            return $this->item = $response['Items']['Item'];
+            if( array_key_exists( 1, $response['Items']['Item'] ) )
+            {
+                return $this->item = $response['Items']['Item'][0];
+            }
+            else
+            {
+                return $this->item = $response['Items']['Item'];
+            }
         }
         else
         {
