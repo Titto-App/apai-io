@@ -35,11 +35,6 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
             return array();
         }
 
-        if( !$this->is_prime() )
-        {
-            return array();
-        }
-
         $this->set( 'asin', 'ASIN' );
         $this->set( 'title', 'ItemAttributes', 'Title' );
         $this->set( 'manufacturer', 'ItemAttributes', 'Manufacturer' );
@@ -276,20 +271,4 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
         }
     }
 
-    /**
-     * Filter for Prime-Only items by ensuring they are available for
-     * Super Saver Shipping
-     * 
-     * @return boolean
-     */
-    private function is_prime()
-    {
-        if( !isset( $this->item['Offers']['Offer']['OfferListing']['IsEligibleForSuperSaverShipping'] )
-            OR $this->item['Offers']['Offer']['OfferListing']['IsEligibleForSuperSaverShipping'] != 1 )
-        {
-            return FALSE;
-        }
-
-        return TRUE;
-    }
 }

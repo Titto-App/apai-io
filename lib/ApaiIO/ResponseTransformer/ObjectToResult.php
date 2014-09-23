@@ -21,16 +21,6 @@ class ObjectToResult extends ObjectToArray implements ResponseTransformerInterfa
                 continue;
             }
 
-            /**
-             * Filter for Prime-Only items by ensuring they are available for
-             * Super Saver Shipping
-             */
-            if( !isset( $item['Offers']['Offer']['OfferListing']['IsEligibleForSuperSaverShipping'] )
-                OR $item['Offers']['Offer']['OfferListing']['IsEligibleForSuperSaverShipping'] != 1 )
-            {
-                continue;
-            }
-
             $row = array();
 
             $row['asin'] = $item['ASIN'];
