@@ -226,15 +226,18 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
             $this->data['image_sets'] = array();
 
             $sets = $this->item['ImageSets']['ImageSet'];
-
+            if ( isset( $sets["Category"] ) )
+            {
+                $sets = array( $sets );
+            }
             foreach( $sets as $set )
             {
-                $row = array(); 
+                $row = array();
                 if( isset( $set['LargeImage']['URL'] ) )
                 {
                     $row['large_image'] = $set['LargeImage']['URL'];
+                    $this->data['image_sets'][] = $row;
                 }
-                $this->data['image_sets'][] = $row;
             }
         }
     }
