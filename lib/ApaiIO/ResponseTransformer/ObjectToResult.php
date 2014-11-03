@@ -26,6 +26,8 @@ class ObjectToResult extends ObjectToArray implements ResponseTransformerInterfa
             $row['asin'] = $item['ASIN'];
             $row['title'] = strip_tags( $item['ItemAttributes']['Title'] );
 
+			$row['category'] = $this->get_category($item);
+
             if( isset( $item['LargeImage']['URL'] ) )
             {
                 $row['large_image'] = $item['LargeImage']['URL'];
@@ -67,4 +69,32 @@ class ObjectToResult extends ObjectToArray implements ResponseTransformerInterfa
         return $data;
     }
 
+    private function get_category($item)
+    {
+        if( isset($item['BrowseNodes']['BrowseNode'])
+				AND is_array($item['BrowseNodes']['BrowseNode']) )
+		{
+			if( isset($item['BrowseNodes']['BrowseNode'][0]) )
+            {
+                $node = $item['BrowseNodes']['BrowseNode'][0];
+            }
+            else
+            {
+                $node = $item['BrowseNodes']['BrowseNode'];
+            }
+            return $this->get_ancestor( $node );
+        }
+    }
+
+    private function get_ancestor($node)
+    {
+        if(isset($node['Ancestors']) AND is_array( $node['Ancestors'] ))
+        {
+            return $this->get_ancestor($node['Ancestors']['BrowseNode']);
+        }
+        else
+        {
+            return $node['Name'];
+        }
+    }
 }
