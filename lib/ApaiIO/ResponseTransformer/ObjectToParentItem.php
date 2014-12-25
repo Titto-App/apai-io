@@ -34,6 +34,12 @@ class ObjectToParentItem extends ObjectToArray implements ResponseTransformerInt
         {
             return array();
         }
+        
+        // Sometimes there's no variation even there's a valid parentASIN
+        if ( !isset( $this->item['Variations']['VariationDimensions']) )
+        {
+            return array();
+        }
         $this->set( $this->item, $this->data, 'asin', 'ASIN' );
         $this->set_array( $this->item, $this->data, 'variation_dimensions', 'Variations', 'VariationDimensions', 'VariationDimension');
         $this->get_items();
