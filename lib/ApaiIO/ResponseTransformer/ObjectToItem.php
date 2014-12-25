@@ -6,6 +6,8 @@
 
 namespace ApaiIO\ResponseTransformer;
 
+use PHPHtmlParser\Dom;
+
 /**
  * 
  */
@@ -36,6 +38,7 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
         }
 
         $this->set( 'asin', 'ASIN' );
+        $this->set( 'parent_asin', 'ParentASIN' );
         $this->set( 'title', 'ItemAttributes', 'Title' );
         $this->set( 'manufacturer', 'ItemAttributes', 'Manufacturer' );
         $this->set( 'isbn', 'ItemAttributes', 'ISBN' );
@@ -173,6 +176,13 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
         {
             // Load the iFrame HTML from the URL returned by the API
             $text = file_get_contents( $this->item['CustomerReviews']['IFrameURL'] );
+
+            /*
+            $dom = new Dom;
+            $dom->load( $text );
+            $a = $dom->getElementsByClass('crIFrameReviewList');
+            $b = $dom->getElementsByTag('text');
+            */
 
             // Clean up the HTML removing scripts and other unneeded data
             $text = preg_replace( '/(<style>.+?)+(<\/style>)/i', '', $text );
