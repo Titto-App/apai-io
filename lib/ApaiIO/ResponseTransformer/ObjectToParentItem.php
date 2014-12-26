@@ -34,7 +34,7 @@ class ObjectToParentItem extends ObjectToArray implements ResponseTransformerInt
         {
             return array();
         }
-        
+
         // Sometimes there's no variation even there's a valid parentASIN
         if ( !isset( $this->item['Variations']['VariationDimensions']) )
         {
@@ -128,7 +128,7 @@ class ObjectToParentItem extends ObjectToArray implements ResponseTransformerInt
             $source_items = $this->item['Variations']['Item'];
             $this->make_array_if_singular($source_items);
 
-            foreach( $this->item['Variations']['Item'] as $item )
+            foreach( $source_items as $item )
             {
                 $new_item = array();
                 $this->set($item, $new_item, 'asin', 'ASIN' );
@@ -186,8 +186,11 @@ class ObjectToParentItem extends ObjectToArray implements ResponseTransformerInt
      */
     private function make_array_if_singular(&$object)
     {
-        if (isset($object) AND !is_array($object)) {
-            $object = array($object);
+        if ( isset($object) )
+        {
+            if ( !is_array($object) || !isset( $source_items[0] )) {
+                $object = array($object);
+            }
         }
     }
 }
