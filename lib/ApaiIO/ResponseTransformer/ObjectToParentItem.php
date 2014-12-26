@@ -188,7 +188,7 @@ class ObjectToParentItem extends ObjectToArray implements ResponseTransformerInt
     {
         if ( isset($object) )
         {
-            if ( !is_array($object) || !isset( $source_items[0] )) {
+            if ( !is_array($object) || !isset( $object[0] )) {
                 $object = array($object);
             }
         }
