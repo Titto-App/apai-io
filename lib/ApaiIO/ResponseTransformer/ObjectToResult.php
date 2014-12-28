@@ -26,7 +26,9 @@ class ObjectToResult extends ObjectToArray implements ResponseTransformerInterfa
             $row['asin'] = $item['ASIN'];
             $row['title'] = strip_tags( $item['ItemAttributes']['Title'] );
 
-			$row['category'] = $this->get_category($item);
+            $row['category'] = $this->get_category($item);
+
+            $row['price'] = $this->get_price($item);
 
             if( isset( $item['LargeImage']['URL'] ) )
             {
@@ -69,6 +71,21 @@ class ObjectToResult extends ObjectToArray implements ResponseTransformerInterfa
         return $data;
     }
 
+    private function get_price($item)
+    {
+        $list_price = isset( $item['ItemAttributes']['ListPrice']['Amount'] ) ?
+            $item['ItemAttributes']['ListPrice']['Amount'] : NULL;
+
+        $amazon_price = isset( $item['Offers']['Offer']['OfferListing']['Price']['Amount'] ) ?
+            $item['Offers']['Offer']['OfferListing']['Price']['Amount'] : NULL;
+
+        $saved = isset( $item['Offers']['Offer']['OfferListing']['AmountSaved'] ) ?
+            $item['Offers']['Offer']['OfferListing']['AmountSaved']['Amount'] : NULL;
+
+        $price = ($list_price) ? $list_price : ($amazon_price ? ($amazon_price + $saved) : NULL );
+        return ($price) ? $price : 0;
+    }
+
     private function get_category($item)
     {
         if( isset($item['BrowseNodes']['BrowseNode']) AND is_array($item['BrowseNodes']['BrowseNode']) )
@@ -96,4 +113,6 @@ class ObjectToResult extends ObjectToArray implements ResponseTransformerInterfa
             return isset($node['Name']) ? $node['Name']: (isset($node['BrowseNodeId']) ? $node['BrowseNodeId'] : '');
         }
     }
+
+
 }
