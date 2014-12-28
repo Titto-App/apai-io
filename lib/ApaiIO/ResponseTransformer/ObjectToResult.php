@@ -89,8 +89,8 @@ class ObjectToResult extends ObjectToArray implements ResponseTransformerInterfa
     private function get_category($item)
     {
         if( isset($item['BrowseNodes']['BrowseNode']) AND is_array($item['BrowseNodes']['BrowseNode']) )
-	{
-	    if( isset($item['BrowseNodes']['BrowseNode'][0]) )
+	    {
+	        if( isset($item['BrowseNodes']['BrowseNode'][0]) )
             {
                 $node = $item['BrowseNodes']['BrowseNode'][0];
             }
