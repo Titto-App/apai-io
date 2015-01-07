@@ -41,6 +41,10 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
         $this->set( 'parent_asin', 'ParentASIN' );
         $this->set( 'title', 'ItemAttributes', 'Title' );
         $this->set( 'manufacturer', 'ItemAttributes', 'Manufacturer' );
+        $this->set( 'brand', 'ItemAttributes', 'Brand' );
+        $this->set( 'color', 'ItemAttributes', 'Color' );
+        $this->set( 'model', 'ItemAttributes', 'Model' );
+        $this->set( 'os', 'ItemAttributes', 'OperatingSystem' );
         $this->set( 'isbn', 'ItemAttributes', 'ISBN' );
         $this->set( 'publisher', 'ItemAttributes', 'Publisher' );
         $this->set( 'number_of_pages', 'ItemAttributes', 'NumberOfPages' );
