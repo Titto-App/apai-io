@@ -37,7 +37,6 @@ class ObjectToItems extends ObjectToArray implements ResponseTransformerInterfac
         {
             $this->set( $i, 'asin', 'ASIN' );
             $this->set( $i, 'title', 'ItemAttributes', 'Title' );
-            $this->set( $i, 'manufacturer', 'ItemAttributes', 'Manufacturer' );
             $this->set( $i, 'isbn', 'ItemAttributes', 'ISBN' );
             $this->set( $i, 'publisher', 'ItemAttributes', 'Publisher' );
             $this->set( $i, 'number_of_pages', 'ItemAttributes', 'NumberOfPages' );
@@ -61,6 +60,7 @@ class ObjectToItems extends ObjectToArray implements ResponseTransformerInterfac
             $this->get_description($i);
             $this->get_category($i);
             $this->get_image_sets($i);
+            $this->get_manufacturer($i);
         }
 
         return $this->data;
@@ -176,6 +176,15 @@ class ObjectToItems extends ObjectToArray implements ResponseTransformerInterfac
 			}
 		}
 	}
+
+    private function get_manufacturer($i)
+    {
+        $this->set( $i, 'manufacturer', 'ItemAttributes', 'Manufacturer' );
+        if ($this->data[$i]['manufacturer'] == '????')
+        {
+            $this->set( $i, 'manufacturer', 'ItemAttributes', 'Brand' );
+        }
+    }
 
     private function get_category($i)
     {
