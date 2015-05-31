@@ -76,13 +76,15 @@ class ObjectToResult extends ObjectToArray implements ResponseTransformerInterfa
         $list_price = isset( $item['ItemAttributes']['ListPrice']['Amount'] ) ?
             $item['ItemAttributes']['ListPrice']['Amount'] : NULL;
 
+        $lowest_new_price = isset( $this->item['OfferSummary']['LowestNewPrice']['Amount'] ) ? $this->item['OfferSummary']['LowestNewPrice']['Amount'] : NULL;
+
         $amazon_price = isset( $item['Offers']['Offer']['OfferListing']['Price']['Amount'] ) ?
             $item['Offers']['Offer']['OfferListing']['Price']['Amount'] : NULL;
 
         $saved = isset( $item['Offers']['Offer']['OfferListing']['AmountSaved'] ) ?
             $item['Offers']['Offer']['OfferListing']['AmountSaved']['Amount'] : NULL;
 
-        $price = ($list_price) ? $list_price : ($amazon_price ? ($amazon_price + $saved) : NULL );
+        $price = ($lowest_new_price) ? $lowest_new_price : ($list_price) ? $list_price : ($amazon_price ? ($amazon_price + $saved) : NULL );
         return ($price) ? $price : 0;
     }
 
