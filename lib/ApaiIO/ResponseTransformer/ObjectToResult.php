@@ -84,7 +84,7 @@ class ObjectToResult extends ObjectToArray implements ResponseTransformerInterfa
         $saved = isset( $item['Offers']['Offer']['OfferListing']['AmountSaved'] ) ?
             $item['Offers']['Offer']['OfferListing']['AmountSaved']['Amount'] : NULL;
 
-        $price = ($lowest_new_price) ? $lowest_new_price : ($list_price) ? $list_price : ($amazon_price ? ($amazon_price + $saved) : NULL );
+        $price = ($lowest_new_price) ? $lowest_new_price : (($list_price) ? $list_price : ($amazon_price ? ($amazon_price + $saved) : NULL ));
         return ($price) ? $price : 0;
     }
 

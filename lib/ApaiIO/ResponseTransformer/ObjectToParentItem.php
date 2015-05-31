@@ -177,7 +177,7 @@ class ObjectToParentItem extends ObjectToArray implements ResponseTransformerInt
         $lowest_new_price = isset( $source['OfferSummary']['LowestNewPrice']['Amount'] ) ? $source['OfferSummary']['LowestNewPrice']['Amount'] : NULL;
         $amazon_price = isset( $source['Offers']['Offer']['OfferListing']['Price']['Amount'] ) ? $source['Offers']['Offer']['OfferListing']['Price']['Amount'] : NULL;
         $saved = isset( $source['Offers']['Offer']['OfferListing']['AmountSaved'] ) ? $source['Offers']['Offer']['OfferListing']['AmountSaved']['Amount'] : NULL;
-        $price = ($lowest_new_price) ? $lowest_new_price : ($list_price) ? $list_price : ($amazon_price ? ($amazon_price + $saved) : NULL );
+        $price = ($lowest_new_price) ? $lowest_new_price : (($list_price) ? $list_price : ($amazon_price ? ($amazon_price + $saved) : NULL ));
         $dest['price'] = ($price) ? $price : (isset($dest['lowest_new_price']) ? $dest['lowest_new_price'] : 0);
     }
 

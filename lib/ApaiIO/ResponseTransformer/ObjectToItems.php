@@ -133,7 +133,7 @@ class ObjectToItems extends ObjectToArray implements ResponseTransformerInterfac
         $lowest_new_price = isset( $this->items[$i]['OfferSummary']['LowestNewPrice']['Amount'] ) ? $this->items[$i]['OfferSummary']['LowestNewPrice']['Amount'] : NULL;
         $amazon_price = isset( $this->items[$i]['Offers']['Offer']['OfferListing']['Price']['Amount'] ) ? $this->items[$i]['Offers']['Offer']['OfferListing']['Price']['Amount'] : NULL;
         $saved = isset( $this->items[$i]['Offers']['Offer']['OfferListing']['AmountSaved'] ) ? $this->items[$i]['Offers']['Offer']['OfferListing']['AmountSaved']['Amount'] : NULL;
-        $price = ($lowest_new_price) ? $lowest_new_price : ($list_price) ? $list_price : ($amazon_price ? ($amazon_price + $saved) : NULL );
+        $price = ($lowest_new_price) ? $lowest_new_price : (($list_price) ? $list_price : ($amazon_price ? ($amazon_price + $saved) : NULL ));
         $this->data[$i]['price'] = ($price) ? $price : $this->data[$i]['lowest_new_price'];
     }
 
