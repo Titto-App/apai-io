@@ -251,11 +251,13 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
             {
                 $sets = array( $sets );
             }
+            $dup_checker = array();
             foreach( $sets as $set )
             {
                 $row = array();
-                if( isset( $set['LargeImage']['URL'] ) )
+                if( isset( $set['LargeImage']['URL'] ) && !in_array($set['LargeImage']['URL'], $dup_checker))
                 {
+                    $dup_checker[] = $set['LargeImage']['URL'];
                     $row['large_image'] = $set['LargeImage']['URL'];
                     $this->data['image_sets'][] = $row;
                 }
@@ -266,7 +268,7 @@ class ObjectToItem extends ObjectToArray implements ResponseTransformerInterface
     private function get_manufacturer()
     {
         $this->set( 'manufacturer', 'ItemAttributes', 'Manufacturer' );
-        if ($this->data['manufacturer'] == '????')
+        if ( !isset($this->data['manufacturer']) || $this->data['manufacturer'] == '????')
         {
             $this->set( 'manufacturer', 'ItemAttributes', 'Brand' );
         }

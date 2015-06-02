@@ -181,7 +181,7 @@ class ObjectToItems extends ObjectToArray implements ResponseTransformerInterfac
     private function get_manufacturer($i)
     {
         $this->set( $i, 'manufacturer', 'ItemAttributes', 'Manufacturer' );
-        if ($this->data[$i]['manufacturer'] == '????')
+        if ( !isset($this->data[$i]['manufacturer']) || $this->data[$i]['manufacturer'] == '????')
         {
             $this->set( $i, 'manufacturer', 'ItemAttributes', 'Brand' );
         }
